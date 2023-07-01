@@ -1,50 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define a 30    //определяем число элементов в сортируемом массиве
+#include <string.h>
 
 int main() {
-    int array[a], left = 0, right = a - 1, last, tmp;
-    //array[a] - сортируемый массив
-    //left и right - левая и правая границы массивов
-    //last - запись индекса последнего обмена,tmp - для перестановки элементов
+    FILE *file;
+    char string[256], item[8];
+    int numbers[32], i = 0, n = 0, k = 0;
 
-    //<---------- заполнение массива псевдорандомными значениями ---------->
-    for(int i = 0; i < a; i++) {
-        array[i] = rand() % (20 + 10 + 1) - 10;
-        printf("%d ", array[i]);    //вывод элементов массива в консоль
-    }
+    //<----------- чтение из файла строки и её преобразование в массив чисел ---------->
+    file = fopen("input.txt", "r");
 
-    //<---------- сортировка массива ---------->
-    while(left < right) {
-        //сортировка массива вправо
-        for(int i = left; i < right; i++) {
-            if(array[i] > array[i + 1]) {   //если первый элемент больше второго, то меняем их местами
-                //перестановка по правилу "Трёх стаканов"
-                tmp = array[i];
-                array[i] = array[i + 1];
-                array[i + 1] = tmp;
-                last = i;
-            }
+    fgets(string, 256, file);
+    printf("%s", string);
+
+    fclose(file);
+
+    while (1) {
+        while ((string[i] != ',')) {
+            item[k] = string[i];
+            k++;
+            i++;
+            if (string[i] == '\n') {break;}
         }
-        right = last;   //двигаем правую границу к индексу последнего обмена
 
-        //сортировка массива влево
-        for(int i = right - 1; i >= left; i--) {
-            if(array[i] > array[i + 1]) {
-                //перестановка по правилу "Трёх стаканов"
-                tmp = array[i];
-                array[i] = array[i + 1];
-                array[i + 1] = tmp;
-                last = i;
-            }
-        }
-        left = last++;  //двигаем левую границу к индексу последнего обмена
+        numbers[n] = atoi(item);
+
+        printf("%d", numbers[n]);
+        if (string[i] == '\n') break;
+        n++;
+        i++;
+        k = 0;
+        memset(item, 0, 8);
     }
 
-    //<---------- вывод содержимого отсортированного массива ---------->
-    printf("\n");
-    for(int i = 0; i < a; i++) {
-        printf("%d ", array[i]);
-    }
-    return 0;
+
+    //<----------- запись в файл отсортированных чисел ---------->
+
+return 0;
 }
