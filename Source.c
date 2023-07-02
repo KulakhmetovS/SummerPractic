@@ -3,26 +3,48 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#define a 1000  //переменная отвечает за количество сортируемых элементов
+#define b 7000  //длина строки для сортировки
 
 int main() {
-    setlocale(LC_ALL, "RUS");
+    setlocale(LC_ALL, "RUS");   //подключаем русский язык
+
 
     FILE* file; //указатель на файл
-    char string[256], item[8];
-    int i = 0, n = 0, k = 0, array[32], left = 0, last, tmp;
+    char string[b], item[8];
+    int i = 0, n = 0, k = 0, array[a], left = 0, last, tmp;
+    memset(array, 0, a);
     //array[a] - сортируемый массив
     //left - левая граница массива
     //last - запись индекса последнего обмена,tmp - для перестановки элементов
     //i, n, k - счётчики
 
 
-    //<----------- чтение из файла строки и её преобразование в массив чисел ---------->
-    file = fopen("input.txt", "r"); //открытие файла input.txt, в котором находятся числа
+    //<----------- запись в файл рандомных чисел ---------->
+    file = fopen("input.txt", "w"); //открытие файла input.txt, в котором находятся числа
 
-    fgets(string, 256, file);   //чтение чисел в качестве строки
-    printf("\t# Исходный массив #\n%s", string);
+    k = rand() % (1000 + 1000 + 1) - 1000;  //заполнение псевдорандомными числами в диапазоне [-1000; 1000]
+    fprintf(file, "%d", k);
+
+    for (i = 1; i < a; i++) {
+        k = rand() % (1000 + 1000 + 1) - 1000;
+        fprintf(file, ", %d", k);
+    }
+    fprintf(file, "%c", '\n');
+
+    k = 0;
+    i = 0;
 
     fclose(file);   //обязательно закрываем файл после работы
+
+
+    //<----------- чтение из файла строки и её преобразование в массив чисел ---------->
+    file = fopen("input.txt", "r");
+
+    fgets(string, b, file);   //чтение чисел в качестве строки
+    printf("\t# Исходный массив #\n%s", string);
+
+    fclose(file);
 
     while (1) { //тут начинается магия
         while (string[i] != ',') {
@@ -88,7 +110,7 @@ int main() {
     printf("\t# Отсортированный массив #\n");
     file = fopen("result.txt", "r");
 
-    fgets(string, 256, file);
+    fgets(string, b, file);
     printf("%s", string);
 
     fclose(file);
